@@ -106,6 +106,8 @@ form_frame = Frame(canvas)
 form_frame.grid(row=0, column=0, columnspan=2, sticky='news')
 canvas.create_window((0, 0), window=form_frame, anchor='nw')
 
+form_frame_top = Frame(form_frame)
+form_frame.grid(row=0, column=0, pady=10, padx=10)
 # Labels
 label_ubicacion_dep = Label(form_frame, text="Departamento")
 label_ubicacion_municipio = Label(form_frame, text="Municipio")
@@ -155,7 +157,9 @@ entry_direccion = Entry(form_frame)
 entry_telefonos = Entry(form_frame)
 entry_equipo = Entry(form_frame)
 var_forma_adquisicion = StringVar(form_frame)
-optionmenu_forma_adquisicion = OptionMenu(form_frame, var_forma_adquisicion, "1. Compra", "2. Donación", "3. Incautación")
+var_forma_adquisicion.set("Opcion de adquisicion")
+optionmenu_forma_adquisicion = ttk.Combobox(form_frame, textvariable=var_forma_adquisicion, values=["Opcion de adquisicion","1. Compra", "2. Donación", "3. Incautación"])
+
 entry_marca = Entry(form_frame)
 entry_documento = Entry(form_frame)
 entry_factura = Entry(form_frame)
@@ -182,8 +186,13 @@ entry_rango_presion = Entry(form_frame)
 entry_rango_humedad = Entry(form_frame)
 entry_rango_corriente = Entry(form_frame)
 entry_rango_frecuencia = Entry(form_frame)
+
+
+
+
+
 var_clasificacion_riesgo = StringVar(form_frame)
-var_clasificacion_riesgo.set("CLASE I")
+var_clasificacion_riesgo.set("Seleccione clase")
 optionmenu_clasificacion_riesgo = ttk.Combobox(form_frame, textvariable=var_clasificacion_riesgo, values=["CLASE I", "CLASE IA", "CLASE IIB", "CLASE III"])
 optionmenu_clasificacion_riesgo.config(width=15, state="readonly", style='Custom.TCombobox')
 
