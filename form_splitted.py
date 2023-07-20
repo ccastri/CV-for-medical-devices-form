@@ -7,7 +7,9 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image
 from reportlab.lib import colors
 from openpyxl import Workbook
-
+import ttkbootstrap as ttkb
+from ttkbootstrap.constants import *
+from ttkbootstrap.widgets import Meter
 
 class Window1:
     imagen= ""
@@ -109,7 +111,7 @@ class Window1:
         label_correo = Label(grid_frame, text="Correo")
         label_direccion = Label(grid_frame, text="Direccion")
         label_telefono = Label(grid_frame, text="Telefonos")
-
+        
         # Entry fields
         var_ubicacion_dep = StringVar(grid_frame)
         var_ubicacion_dep.set(self.departamento)
@@ -121,6 +123,24 @@ class Window1:
         entry_correo = Entry(grid_frame)
         entry_direccion = Entry(grid_frame)
         entry_telefono = Entry(grid_frame)
+        
+        def update_meter_value():
+            current_value = current_slider.get()
+            meter.value = current_value
+            win.after(100, update_meter_value)
+        # Default meter style
+        meter = Meter(grid_frame)
+        meter.grid(row=7, column=1, padx=10, pady=5)
+
+        # Slider to control the current value
+        current_slider = Scale(grid_frame, from_=0, to=100, orient=HORIZONTAL)
+        current_slider.grid(row=7, column=1, padx=10, pady=5)
+
+        # Set the custom maximum value for the meter
+        meter.maximum = 100
+
+        # Update the meter value based on the slider's current value
+        update_meter_value()
 
         # Set the previously entered values
         entry_entidad.insert(0, self.entidad)
@@ -149,8 +169,10 @@ class Window1:
 
         self.image_label.bind("<Button-1>", self.open_image)
         # Next button
-        next_button = Button(form_frame, text="Siguiente", command=lambda: self.save_values(entry_entidad.get(), entry_correo.get(), entry_direccion.get(), entry_telefono.get(), var_ubicacion_dep.get(), var_ubicacion_municipio.get()))
-        next_button.grid(row=3, columnspan=4, pady=10)
+        b1 = ttkb.Button(form_frame, text='Siguiente', bootstyle=(SUCCESS, OUTLINE), command=lambda: self.save_values(entry_entidad.get(), entry_correo.get(), entry_direccion.get(), entry_telefono.get(), var_ubicacion_dep.get(), var_ubicacion_municipio.get()))
+        b1.grid(row=3, columnspan=4, pady=10)
+        # next_button = Button(form_frame, text="Siguiente", command=lambda: self.save_values(entry_entidad.get(), entry_correo.get(), entry_direccion.get(), entry_telefono.get(), var_ubicacion_dep.get(), var_ubicacion_municipio.get()))
+        # next_button.grid(row=3, columnspan=4, pady=10)
 
     def open_image(self, event):
         # Open a file dialog to select an image file
@@ -321,18 +343,19 @@ class Window3:
         self.documento = documento
 
 
-win = Tk()
+# win = Tk()
+win = ttkb.Window(themename="darkly")
 win.title('Formulario Hoja de Vida')
 win.geometry('720x900')
 
 # Create a notebook widget to hold the different windows
-notebook = ttk.Notebook(win)
+notebook = ttkb.Notebook(win, bootstyle='success')
 notebook.pack(fill=BOTH, expand=True)
 
 # Create the three frames for the windows
-frame1 = Frame(notebook)
-frame2 = Frame(notebook)
-frame3 = Frame(notebook)
+frame1 = ttkb.Frame(notebook)
+frame2 = ttkb.Frame(notebook)
+frame3 = ttkb.Frame(notebook)
 
 # Create the three windows and associate them with the frames
 window1 = Window1(frame1)
@@ -340,8 +363,9 @@ window2 = Window2(frame2)
 window3 = Window3(frame3)
 
 # Add the frames as tabs to the notebook
-notebook.add(frame1, text="Window 1")
-notebook.add(frame2, text="Window 2")
-notebook.add(frame3, text="Window 3")
+notebook.add(frame1, text="Hoja de vida")
+notebook.add(frame2, text="Pagina 2")
+notebook.add(frame3, text="Base de datos")
 
+notebook.bootstyle = "info"
 win.mainloop()
